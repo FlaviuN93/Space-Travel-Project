@@ -1,9 +1,11 @@
-import { Planet } from "./planet.model";
 import { Injectable } from "@angular/core";
-import { Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
+import { Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import { Router } from "@angular/router";
+
+import { Planet } from "./planet.model";
+
 @Injectable({ providedIn: "root" })
 export class PlanetService {
   private planets: Planet[] = [];
@@ -13,7 +15,7 @@ export class PlanetService {
 
   getPlanets() {
     this.http
-      .get<{ message: string; planets: any }>("http://localhost:3000/planets")
+      .get<{ message: string; planets: any }>("http://localhost:3000/planets/")
       .pipe(
         map(planetData => {
           return planetData.planets.map(planet => {
@@ -25,8 +27,8 @@ export class PlanetService {
           });
         })
       )
-      .subscribe(transformedPlanets => {
-        this.planets = transformedPlanets;
+      .subscribe(transformedPosts => {
+        this.planets = transformedPosts;
         this.planetUpdated.next([...this.planets]);
       });
   }
@@ -48,13 +50,13 @@ export class PlanetService {
       status: status
     };
     this.http
-      .post<{ message: string; postId: string }>(
-        "http://localhost:3000/planets",
+      .post<{ message: string; planetId: string }>(
+        "http://localhost:3000/planets/",
         planet
       )
       .subscribe(responseData => {
-        const postId = responseData.postId;
-        planet.id = postId;
+        const id = responseData.planetId;
+        planet.id = id;
         this.planets.push(planet);
         this.planetUpdated.next([...this.planets]);
         this.router.navigate(["/"]);
@@ -66,10 +68,10 @@ export class PlanetService {
     this.http
       .patch("http://localhost:3000/planets/" + id, planet)
       .subscribe(response => {
-        const updatedPlanets = [...this.planets];
-        const oldPostIndex = updatedPlanets.findIndex(p => p.id === planet.id);
-        updatedPlanets[oldPostIndex] = planet;
-        this.planets = updatedPlanets;
+        const updatedPosts = [...this.planets];
+        const oldPostIndex = updatedPosts.findIndex(p => p.id === planet.id);
+        updatedPosts[oldPostIndex] = planet;
+        this.planets = updatedPosts;
         this.planetUpdated.next([...this.planets]);
         this.router.navigate(["/"]);
       });
@@ -79,10 +81,10 @@ export class PlanetService {
     this.http
       .delete("http://localhost:3000/planets/" + planetId)
       .subscribe(() => {
-        const updatedPlanets = this.planets.filter(
+        const updatedPosts = this.planets.filter(
           planet => planet.id !== planetId
         );
-        this.planets = updatedPlanets;
+        this.planets = updatedPosts;
         this.planetUpdated.next([...this.planets]);
       });
   }

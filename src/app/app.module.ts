@@ -1,6 +1,6 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { AppComponent } from "./app.component";
@@ -17,23 +17,32 @@ import { LayoutModule } from "@angular/cdk/layout";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatButtonModule } from "@angular/material/button";
 import { MatSidenavModule } from "@angular/material/sidenav";
-import { MatExpansionModule, MatIconModule, MatProgressSpinnerModule } from "@angular/material";
+import {
+  MatExpansionModule,
+  MatIconModule,
+  MatProgressSpinnerModule
+} from "@angular/material";
 import { MatSelectModule } from "@angular/material/select";
 import { HttpClientModule } from "@angular/common/http";
 import { AppRoutingModule } from "./app.routing.module";
+import { SignUpComponent } from "./auth/signup/sign-up.component";
+import { LoginComponent } from "./auth/login/login.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     CreatePlanetComponent,
-    PlanetsListComponent
+    PlanetsListComponent,
+    SignUpComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     LayoutModule,
     HttpClientModule,
     MatToolbarModule,

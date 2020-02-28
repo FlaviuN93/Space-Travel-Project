@@ -11,14 +11,17 @@ import { Subscription } from "rxjs";
 export class PlanetsListComponent implements OnInit, OnDestroy {
   planets: Planet[] = [];
   private planetSub: Subscription;
+  isLoading = false;
 
   constructor(public planetService: PlanetService) {}
 
   ngOnInit() {
+    this.isLoading = true;
     this.planetService.getPlanets();
     this.planetSub = this.planetService
       .getPlanetsUpdated()
       .subscribe((planets: Planet[]) => {
+        this.isLoading = false;
         this.planets = planets;
       });
   }

@@ -1,5 +1,6 @@
-const Planet = require("../models/planet");
 const express = require("express");
+
+const Planet = require("../models/planet");
 
 const router = express.Router();
 
@@ -8,10 +9,11 @@ router.post("/planets", (req, res, next) => {
     description: req.body.description,
     status: req.body.status
   });
-  planet.save().then(createdPost => {
-    res
-      .status(201)
-      .json({ message: "Post added succesfully", planetId: createdPost._id });
+  planet.save().then(createdPlanet => {
+    res.status(201).json({
+      message: "Planet added successfully",
+      planet: createdPlanet._id
+    });
   });
 });
 
@@ -22,25 +24,25 @@ router.patch("/planets/:id", (req, res, next) => {
     status: req.body.status
   });
   Planet.updateOne({ _id: req.params.id }, planetStatus).then(result => {
-    res.status(200).json({ message: "Update successful" });
+    res.status(200).json({ message: "Update successful!" });
   });
 });
 
 router.get("/planets", (req, res, next) => {
   Planet.find().then(documents => {
     res.status(200).json({
-      message: "Planets fetched succesfully",
+      message: "Planets fetched successfully!",
       planets: documents
     });
   });
 });
 
-router.get("planets/:id", (req, res, next) => {
+router.get("/planets/:id", (req, res, next) => {
   Planet.findById(req.params.id).then(planet => {
     if (planet) {
       res.status(200).json(planet);
     } else {
-      res.status(404).json({ message: "Post not found" });
+      res.status(404).json({ message: "Planet not found!" });
     }
   });
 });
@@ -48,7 +50,8 @@ router.get("planets/:id", (req, res, next) => {
 router.delete("/planets/:id", (req, res, next) => {
   Planet.deleteOne({ _id: req.params.id }).then(result => {
     console.log(result);
-    res.status(200).json({ message: "Code deleted" });
+    res.status(200).json({ message: "Planet deleted!" });
   });
 });
+
 module.exports = router;

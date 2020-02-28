@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const planetRoutes = require("./routes/planets");
+const userRoutes = require("./routes/user");
 const mongoose = require("mongoose");
 
 const app = express();
@@ -8,7 +9,7 @@ mongoose
   // Password:4w9VC6mOaNYbFkSX
   .connect(
     "mongodb+srv://admin-flaviu:4w9VC6mOaNYbFkSX@cluster0-o34db.mongodb.net/PlanetsDB?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }
+    { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }
   )
   .then(() => {
     console.log("Connected to the database");
@@ -34,5 +35,6 @@ app.use((req, res, next) => {
 });
 
 app.use(planetRoutes);
+app.use(userRoutes);
 
 module.exports = app;

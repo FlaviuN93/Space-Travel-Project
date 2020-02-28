@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { NgForm } from "@angular/forms";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { PlanetService } from "../planet.service";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Planet } from "../planet.model";
@@ -13,6 +13,8 @@ export class CreatePlanetComponent implements OnInit {
   private mode = "create";
   private planetId: string;
   planet: Planet;
+  form: FormGroup;
+  imagePreview: string;
   isLoading = false;
 
   statuses = ["OK", "!OK", "TODO", "En route"];
@@ -23,6 +25,12 @@ export class CreatePlanetComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.form = new FormGroup({
+      description: new FormControl(null, {
+        validators: [Validators.required, Validators.maxLength(20)]
+      }),
+      status: new FormControl(null, { validators: [Validators.required] })
+    });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has("planetId")) {
         this.mode = "edit";
@@ -35,6 +43,10 @@ export class CreatePlanetComponent implements OnInit {
             description: planetData.description,
             status: planetData.status
           };
+          this.form.setValue({
+            description: this.planet.description,
+            status: this.planet.status
+          });
         });
       } else {
         this.mode = "create";
@@ -42,21 +54,39 @@ export class CreatePlanetComponent implements OnInit {
       }
     });
   }
-  onSavePlanet(form: NgForm) {
-    if (form.invalid) {
+  onSavePlanet() {
+    if (this.form.invalid) {
       return;
     }
     this.isLoading = true;
     if (this.mode === "create") {
-      this.planetService.addPlanet(form.value.description, form.value.status);
+      this.planetService.addPlanet(
+        this.form.value.description,
+        this.form.value.status
+      );
     } else {
       this.planetService.updatePlanetStatus(
         this.planetId,
-        form.value.description,
-        form.value.status
+        this.form.value.description,
+        this.form.value.status
       );
     }
-    form.resetForm();
+    this.form.reset();
+  }
+
+  onImagePicked(event: Event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    if (file) {
+      this.form.patchValue({ file: file });
+      this.form.get("file").updateValueAndValidity();
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result as string;
+        //check lesson 81,82,83 for images
+      };
+      reader.readAsDataURL(file);
+    }
   }
 }
 // export interface Tile {
