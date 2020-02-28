@@ -1,0 +1,15 @@
+<mat-accordion multi="true" *ngIf="planets.length > 0">
+  <mat-expansion-panel *ngFor="let planet of planets">
+    <mat-expansion-panel-header>
+      {{ planet.status }}
+    </mat-expansion-panel-header>
+    <p>{{ planet.description }}</p>
+    <mat-action-row>
+      <a mat-button color="primary" [routerLink]="['/edit', planet.id]">EDIT</a>
+      <button mat-button color="warn" (click)="onDelete(planet.id)">
+        DELETE
+      </button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+<p class="mat-body-1 info-text" *ngIf="planets.length <= 0">No planets added</p>
