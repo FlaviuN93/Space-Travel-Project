@@ -44,48 +44,40 @@ export class PlanetService {
   }
 
   addPlanet(description: string, status: string) {
-    const planet: Planet = {
-      id: null,
-      description: description,
-      status: status
-    };
+    const planetData = new FormData();
+    planetData.append("description", description);
+    planetData.append("status", status);
     this.http
       .post<{ message: string; planetId: string }>(
         "http://localhost:3000/planets/",
-        planet
+        planetData
       )
       .subscribe(responseData => {
-        const id = responseData.planetId;
-        planet.id = id;
-        this.planets.push(planet);
-        this.planetUpdated.next([...this.planets]);
         this.router.navigate(["/"]);
       });
   }
 
   updatePlanetStatus(id: string, description: string, status: string) {
-    const planet: Planet = { id: id, description: description, status: status };
+    let planetData: Planet = {
+      id: id,
+      description: description,
+      status: status
+    };
     this.http
-      .patch("http://localhost:3000/planets/" + id, planet)
+      .patch("http://localhost:3000/planets/" + id, planetData)
       .subscribe(response => {
-        const updatedPosts = [...this.planets];
-        const oldPostIndex = updatedPosts.findIndex(p => p.id === planet.id);
-        updatedPosts[oldPostIndex] = planet;
-        this.planets = updatedPosts;
-        this.planetUpdated.next([...this.planets]);
         this.router.navigate(["/"]);
       });
   }
 
   deletePlanet(planetId: string) {
-    this.http
-      .delete("http://localhost:3000/planets/" + planetId)
-      .subscribe(() => {
-        const updatedPosts = this.planets.filter(
-          planet => planet.id !== planetId
-        );
-        this.planets = updatedPosts;
-        this.planetUpdated.next([...this.planets]);
-      });
+    this.http.delete("http://localhost:3000/planets/" + planetId);
+    // .subscribe(() => {
+    //   const updatedPosts = this.planets.filter(
+    //     planet => planet.id !== planetId
+    //   );
+    //   this.planets = updatedPosts;
+    //   this.planetUpdated.next([...this.planets]);
+    // });
   }
 }

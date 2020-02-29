@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Planet } from "../planet.model";
 import { PlanetService } from "../planet.service";
 import { Subscription } from "rxjs";
+import { AuthService } from "src/app/auth/auth.service";
 
 @Component({
   selector: "app-planets-list",
@@ -11,9 +12,14 @@ import { Subscription } from "rxjs";
 export class PlanetsListComponent implements OnInit, OnDestroy {
   planets: Planet[] = [];
   private planetSub: Subscription;
+  private authStatusSub: Subscription;
   isLoading = false;
+  isAuthenticated = false;
 
-  constructor(public planetService: PlanetService) {}
+  constructor(
+    public planetService: PlanetService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.isLoading = true;
@@ -24,6 +30,12 @@ export class PlanetsListComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.planets = planets;
       });
+    this.isAuthenticated = this.authService.getIsAuth();
+    this.authStatusSub = this.authService
+      .getAuthStatusListener()
+      .subscribe(userAuthenticated => {
+        this.isAuthenticated = userAuthenticated;
+      });
   }
 
   onDelete(planetId: string) {
@@ -33,5 +45,6 @@ export class PlanetsListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.planetSub.unsubscribe();
+    this.authStatusSub.unsubscribe();
   }
 }

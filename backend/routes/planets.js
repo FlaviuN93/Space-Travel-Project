@@ -1,10 +1,10 @@
 const express = require("express");
 
 const Planet = require("../models/planet");
-
+const checkAuth = require("../middleware/check-auth");
 const router = express.Router();
 
-router.post("/planets", (req, res, next) => {
+router.post("/planets", checkAuth, (req, res, next) => {
   const planet = new Planet({
     description: req.body.description,
     status: req.body.status
@@ -12,12 +12,16 @@ router.post("/planets", (req, res, next) => {
   planet.save().then(createdPlanet => {
     res.status(201).json({
       message: "Planet added successfully",
-      planet: createdPlanet._id
+      planet: {
+        id: createdPlanet._id,
+        description: createdPlanet.description,
+        status: createdPlanet.status
+      }
     });
   });
 });
 
-router.patch("/planets/:id", (req, res, next) => {
+router.patch("/planets/:id", checkAuth, (req, res, next) => {
   const planetStatus = new Planet({
     _id: req.body.id,
     description: req.body.description,
@@ -25,6 +29,8 @@ router.patch("/planets/:id", (req, res, next) => {
   });
   Planet.updateOne({ _id: req.params.id }, planetStatus).then(result => {
     res.status(200).json({ message: "Update successful!" });
+  }).catch((err)=>{
+
   });
 });
 
@@ -47,7 +53,7 @@ router.get("/planets/:id", (req, res, next) => {
   });
 });
 
-router.delete("/planets/:id", (req, res, next) => {
+router.delete("/planets/:id", checkAuth, (req, res, next) => {
   Planet.deleteOne({ _id: req.params.id }).then(result => {
     console.log(result);
     res.status(200).json({ message: "Planet deleted!" });

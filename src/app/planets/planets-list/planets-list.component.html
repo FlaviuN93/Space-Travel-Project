@@ -5,7 +5,7 @@
       {{ planet.status }}
     </mat-expansion-panel-header>
     <p>{{ planet.description }}</p>
-    <mat-action-row>
+    <mat-action-row *ngIf="isAuthenticated">
       <a mat-button color="primary" [routerLink]="['/edit', planet.id]">EDIT</a>
       <button mat-button color="warn" (click)="onDelete(planet.id)">
         DELETE

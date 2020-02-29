@@ -1,17 +1,18 @@
 import { Component } from "@angular/core";
 import { NgForm } from "@angular/forms";
+
 import { AuthService } from "../auth.service";
 
 @Component({
-  templateUrl: "./sign-up.component.html",
-  styleUrls: ["./sign-up.component.css"]
+  templateUrl: "./signup.component.html",
+  styleUrls: ["./signup.component.css"]
 })
-export class SignUpComponent {
+export class SignupComponent {
   isLoading = false;
 
   constructor(public authService: AuthService) {}
 
-  onSignUp(form: NgForm) {
+  onSignup(form: NgForm) {
     if (form.invalid) {
       return;
     }

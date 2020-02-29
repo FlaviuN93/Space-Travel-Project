@@ -23,10 +23,12 @@ import {
   MatProgressSpinnerModule
 } from "@angular/material";
 import { MatSelectModule } from "@angular/material/select";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { AppRoutingModule } from "./app.routing.module";
-import { SignUpComponent } from "./auth/signup/sign-up.component";
+
 import { LoginComponent } from "./auth/login/login.component";
+import { SignupComponent } from "./auth/signup/signup.component";
+import { AuthInterceptor } from "./auth/auth-interceptor";
 
 @NgModule({
   declarations: [
@@ -34,7 +36,7 @@ import { LoginComponent } from "./auth/login/login.component";
     HeaderComponent,
     CreatePlanetComponent,
     PlanetsListComponent,
-    SignUpComponent,
+    SignupComponent,
     LoginComponent
   ],
   imports: [
@@ -58,7 +60,9 @@ import { LoginComponent } from "./auth/login/login.component";
     MatProgressSpinnerModule,
     MatExpansionModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
