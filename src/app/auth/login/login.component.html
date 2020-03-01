@@ -5,32 +5,33 @@
       <input
         matInput
         type="email"
-        name="email"
-        placeholder="E-mail"
+        placeholder="E-Mail"
         #emailInput="ngModel"
+        name="email"
         ngModel
         required
         email
       />
       <mat-error *ngIf="emailInput.invalid"
-        >Please enter a valid email.</mat-error
+        >Please enter valid email.</mat-error
       >
     </mat-form-field>
-
     <mat-form-field>
       <input
         type="password"
-        name="password"
         matInput
         placeholder="Password"
+        name="password"
         ngModel
-        required
         #passwordInput="ngModel"
+        required
       />
       <mat-error *ngIf="passwordInput.invalid"
         >Please enter a valid password.</mat-error
       >
     </mat-form-field>
-    <button mat-raised-button color="accent" type="submit">Login</button>
+    <button mat-raised-button color="accent" type="submit" *ngIf="!isLoading">
+      Login
+    </button>
   </form>
 </mat-card>

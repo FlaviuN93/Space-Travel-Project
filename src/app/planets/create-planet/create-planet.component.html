@@ -1,6 +1,26 @@
 <mat-card>
   <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <form [formGroup]="form" (submit)="onSavePlanet()" *ngIf="!isLoading">
+  <form
+    [formGroup]="form"
+    (submit)="onSavePlanet()"
+    *ngIf="!isLoading"
+    class="body"
+  >
+    <img class="one-planet-img" href="./imgg/p1.svg" />
+    <label class="one-planet-name">TAU 23</label>
+    <mat-form-field>
+      <textarea
+        class="textarea"
+        matInput
+        rows="3"
+        formControlName="description"
+        placeholder="Planet Description"
+      ></textarea>
+      <mat-error *ngIf="form.get('description').invalid"
+        >Please write a planet description</mat-error
+      >
+    </mat-form-field>
+
     <mat-form-field>
       <mat-select placeholder="Status" formControlName="status">
         <mat-option *ngFor="let status of statuses" [value]="status" matInput>
@@ -11,28 +31,19 @@
         >Pick a planet status</mat-error
       >
     </mat-form-field>
-    <!-- <div>
-      <button mat-stroked-button type="button" (click)="filePicker.click()">
-        Pick Image
-      </button>
-      <input type="file" #filePicker (change)="onImagePicked($event)" />
-    </div>
-    <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview">
-      <img [src]="imagePreview" [alt]="form.value.status" />
-    </div> -->
-    <mat-form-field>
-      <textarea
-        matInput
-        rows="4"
-        formControlName="description"
-        placeholder="Planet Description"
-      ></textarea>
-      <mat-error *ngIf="form.get('description').invalid"
-        >Please write a planet description</mat-error
-      >
-    </mat-form-field>
-    <button mat-raised-button color="accent" type="submit">
+    <label class="bycapitan">by captan <span>Johnathan Smartson</span></label>
+    <label class="robots">Robots: <span>T2011, T215, T72 ...</span></label>
+    <button mat-raised-button color="accent" type="submit" class="submit">
       Save Post
     </button>
   </form>
 </mat-card>
+<!-- <div>
+          <button mat-stroked-button type="button" (click)="filePicker.click()">
+            Pick Image
+          </button>
+          <input type="file" #filePicker (change)="onImagePicked($event)" />
+        </div>
+        <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview">
+          <img [src]="imagePreview" [alt]="form.value.status" />
+        </div> -->

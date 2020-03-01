@@ -1,26 +1,77 @@
-:host {
-  display: block;
-  margin-top: 25px;
-}
-
-mat-form-field,
-textarea {
-  width: 70%;
+mat-card {
+  width: 90%;
+  margin: auto;
 }
 
 mat-spinner {
   margin: auto;
 }
 
-.image-preview {
+.one-planet-img {
+  width: 60pt;
+  height: 60pt;
+  display: block;
+  margin: auto;
+  margin-top: 0px;
+}
+
+.one-planet-name {
+  font-size: 17px;
+  font-weight: bolder;
+  display: block;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+mat-form-field,
+textarea {
+  width: auto;
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.bycapitan {
+  margin-bottom: 10px;
+  display: block;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.bycapitan span {
+  font-weight: normal;
+  color: gray;
+}
+
+.robots {
+  font-size: 14px;
+  margin-top: 5px;
+  display: block;
+  font-weight: bolder;
+}
+
+.robots span {
+  font-weight: normal;
+}
+
+.submit {
+  background-color: #b43f52;
+  border: none;
+  border-radius: 2pt;
+  color: white;
+  margin: auto;
+  display: block;
+  padding: 2px 15px;
+  font-size: 14px;
+  margin-top: 25px;
+}
+/* .image-preview {
   height: 4rem;
   margin: 1rem 0;
 }
 
 .image-preview img {
   height: 100%;
-}
-
-input[type="file"] {
+} */
+/* input[type="file"] {
   visibility: hidden;
-}
+} */

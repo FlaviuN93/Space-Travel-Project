@@ -1,33 +1,41 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { PlanetService } from "../planet.service";
 import { ActivatedRoute, ParamMap } from "@angular/router";
-import { Planet } from "../planet.model";
 
+import { PlanetsService } from "../planets.service";
+import { Planet } from "../planet.model";
+import { Subscription } from "rxjs";
+import { AuthService } from "src/app/auth/auth.service";
 @Component({
   selector: "app-create-planet",
   templateUrl: "./create-planet.component.html",
   styleUrls: ["./create-planet.component.css"]
 })
-export class CreatePlanetComponent implements OnInit {
+export class CreatePlanetComponent implements OnInit, OnDestroy {
+  planet: Planet;
+  isLoading = false;
+  form: FormGroup;
   private mode = "create";
   private planetId: string;
-  planet: Planet;
-  form: FormGroup;
-  imagePreview: string;
-  isLoading = false;
+  private authStatusSub: Subscription;
 
   statuses = ["OK", "!OK", "TODO", "En route"];
 
   constructor(
-    public planetService: PlanetService,
-    public route: ActivatedRoute
+    public planetsService: PlanetsService,
+    public route: ActivatedRoute,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
+    this.authStatusSub = this.authService
+      .getAuthListener()
+      .subscribe(authStatus => {
+        this.isLoading = false;
+      });
     this.form = new FormGroup({
       description: new FormControl(null, {
-        validators: [Validators.required, Validators.maxLength(20)]
+        validators: [Validators.required, Validators.maxLength(25)]
       }),
       status: new FormControl(null, { validators: [Validators.required] })
     });
@@ -36,7 +44,7 @@ export class CreatePlanetComponent implements OnInit {
         this.mode = "edit";
         this.planetId = paramMap.get("planetId");
         this.isLoading = true;
-        this.planetService.getPlanet(this.planetId).subscribe(planetData => {
+        this.planetsService.getPostEdit(this.planetId).subscribe(planetData => {
           this.isLoading = false;
           this.planet = {
             id: planetData._id,
@@ -54,18 +62,30 @@ export class CreatePlanetComponent implements OnInit {
       }
     });
   }
+
+  // onImagePicked(event: Event) {
+  //   const file = (event.target as HTMLInputElement).files[0];
+  //   this.form.patchValue({ image: file });
+  //   this.form.get("image").updateValueAndValidity();
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     this.imagePreview = reader.result as string;
+  //   };
+  //   reader.readAsDataURL(file);
+  // }
+
   onSavePlanet() {
     if (this.form.invalid) {
       return;
     }
     this.isLoading = true;
     if (this.mode === "create") {
-      this.planetService.addPlanet(
+      this.planetsService.addPost(
         this.form.value.description,
         this.form.value.status
       );
     } else {
-      this.planetService.updatePlanetStatus(
+      this.planetsService.updatePost(
         this.planetId,
         this.form.value.description,
         this.form.value.status
@@ -73,29 +93,7 @@ export class CreatePlanetComponent implements OnInit {
     }
     this.form.reset();
   }
-
-  onImagePicked(event: Event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    if (file) {
-      this.form.patchValue({ file: file });
-      this.form.get("file").updateValueAndValidity();
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreview = reader.result as string;
-        //check lesson 81,82,83 for images
-      };
-      reader.readAsDataURL(file);
-    }
+  ngOnDestroy() {
+    this.authStatusSub.unsubscribe();
   }
 }
-// export interface Tile {
-//   cols: number;
-//   rows: number;
-//   id: string;
-// }
-// tiles: Tile[] = [
-//   { id: "One", cols: 1, rows: 1 },
-//   { id: "Two", cols: 2, rows: 1 },
-//   { id: "Three", cols: 1, rows: 1 }
-// ];

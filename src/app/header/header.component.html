@@ -1,38 +1,30 @@
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav
-    #drawer
-    class="sidenav"
-    fixedInViewport="false"
-    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'"
-    [opened]="(isHandset$ | async) === false"
-  >
-    <mat-toolbar>Menu</mat-toolbar>
-    <mat-nav-list *ngIf="isAuthenticated">
-      <a mat-list-item routerLink="/">Home</a>
-      <a mat-list-item routerLink="/newPlanet">New Planet</a>
-      <a mat-list-item (click)="onLogout()">Logout</a>
-    </mat-nav-list>
-    <mat-nav-list *ngIf="!isAuthenticated">
-      <a mat-list-item routerLink="/">Home</a>
-      <a mat-list-item routerLink="/signup">Signup</a>
-      <a mat-list-item routerLink="/login">Login</a>
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async"
+<mat-toolbar color="primary">
+  <span>
+    <a class="home" routerLink="/">XPAND</a>
+  </span>
+  <span></span>
+  <ul>
+    <li *ngIf="userIsAuthenticated">
+      <a mat-button routerLink="/create" routerLinkActive="mat-button"
+        >New Post</a
       >
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
-      <span routerLink="/">Project-Space-Travel</span>
-    </mat-toolbar>
-    <ng-content></ng-content>
-    <!-- Add Content Here -->
-  </mat-sidenav-content>
-</mat-sidenav-container>
+    </li>
+    <li *ngIf="!userIsAuthenticated">
+      <a mat-button routerLink="/auth/login" routerLinkActive="mat-button"
+        >Login</a
+      >
+    </li>
+    <li *ngIf="!userIsAuthenticated">
+      <a
+        class="signup"
+        mat-button
+        routerLink="/auth/signup"
+        routerLinkActive="mat-button"
+        >Sign-In</a
+      >
+    </li>
+    <li *ngIf="userIsAuthenticated">
+      <button mat-button (click)="onLogout()">Logout</button>
+    </li>
+  </ul>
+</mat-toolbar>

@@ -1,25 +1,29 @@
+const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
-const planetRoutes = require("./routes/planets");
-const userRoutes = require("./routes/user");
 const mongoose = require("mongoose");
 
+const planetRoutes = require("./routes/planet");
+const userRoutes = require("./routes/user");
+
 const app = express();
+
 mongoose
-  // Password:4w9VC6mOaNYbFkSX
-  // JWT PASSWORD: fpdlsd123123m1ofmdsofisfmso
   .connect(
-    "mongodb+srv://admin-flaviu:4w9VC6mOaNYbFkSX@cluster0-o34db.mongodb.net/PlanetsDB?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }
+    "mongodb+srv://admin-flaviu:" +
+      process.env.MONGO_ATLAS_PW +
+      "@cluster0-o34db.mongodb.net/node-angular?retryWrites=true&w=majority",
+    { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true }
   )
   .then(() => {
-    console.log("Connected to the database");
+    console.log("Connected to database!");
   })
   .catch(() => {
-    console.log("Connection to the database failed!");
+    console.log("Connection failed!");
   });
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -31,11 +35,9 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Methods",
     "GET, POST, PATCH, PUT, DELETE, OPTIONS"
   );
-
   next();
 });
 
-app.use(planetRoutes);
-app.use("/user", userRoutes);
-
+app.use("/api/posts", planetRoutes);
+app.use("/api/user", userRoutes);
 module.exports = app;

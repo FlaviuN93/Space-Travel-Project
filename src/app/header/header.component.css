@@ -1,18 +1,20 @@
-.sidenav-container {
-  height: 100%;
+ul {
+  list-style: none;
+  padding-left: 120px;
+  display: flex;
+  margin: 0;
 }
 
-.sidenav {
-  width: 200px;
+a {
+  text-decoration: none;
+  color: white;
 }
 
-.sidenav .mat-toolbar {
-  background: inherit;
+.signup {
+  margin-left: 40px;
 }
 
 .mat-toolbar.mat-primary {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  padding-bottom: 2%;
+  background-color: #b43f52;
+  padding: 2.5rem;
 }
