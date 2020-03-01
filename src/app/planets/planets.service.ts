@@ -11,19 +11,13 @@ const BACKEND_URL = environment.apiUrl + "/posts/";
 @Injectable({ providedIn: "root" })
 export class PlanetsService {
   private planets: Planet[] = [];
-  private postsUpdated = new Subject<{
-    planets: Planet[];
-    postCount: number;
-  }>();
+  private planetsUpdated = new Subject<Planet[]>();
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getPosts(postsPerPage: number, currentPage: number) {
-    const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
+  getPosts() {
     this.http
-      .get<{ message: string; planets: any; maxPosts: number }>(
-        BACKEND_URL + queryParams
-      )
+      .get<{ message: string; planets: any }>(BACKEND_URL)
       .pipe(
         map(planetData => {
           return {
@@ -31,24 +25,21 @@ export class PlanetsService {
               return {
                 status: planet.status,
                 description: planet.description,
-                id: planet._id
+                id: planet._id,
+                creator: planet.creator
               };
-            }),
-            maxPosts: planetData.maxPosts
+            })
           };
         })
       )
       .subscribe(transformedPostData => {
         this.planets = transformedPostData.planets;
-        this.postsUpdated.next({
-          planets: [...this.planets],
-          postCount: transformedPostData.maxPosts
-        });
+        this.planetsUpdated.next([...this.planets]);
       });
   }
 
   getPostUpdateListener() {
-    return this.postsUpdated.asObservable();
+    return this.planetsUpdated.asObservable();
   }
 
   getPostEdit(id: string) {
@@ -56,37 +47,38 @@ export class PlanetsService {
       _id: string;
       description: string;
       status: string;
+      creator: string;
     }>(BACKEND_URL + id);
   }
 
   addPost(description: string, status: string) {
-    //   .post<{ message: string; postId: string }>(
-    //     "http://localhost:3000/api/posts",
-    //     post
-    // const planetData ;
-    // planetData.append("description", description);
-    // planetData.append("status", status);
     const planet: Planet = {
       id: null,
       description: description,
-      status: status
+      status: status,
+      creator: null
     };
     this.http
-      .post<{ message: string; planet: Planet }>(BACKEND_URL, planet)
+      .post<{ message: string; planetId: string }>(BACKEND_URL, planet)
       .subscribe(responseData => {
+        const id = responseData.planetId;
+        planet.id = id;
+        this.planets.push(planet);
+        this.planetsUpdated.next([...this.planets]);
         this.router.navigate(["/"]);
       });
   }
 
   updatePost(id: string, description: string, status: string) {
-    let planetData: Planet | FormData;
-
-    planetData = {
+    const planetData: Planet = {
       id: id,
       description: description,
-      status: status
+      status: status,
+      creator: null
     };
     this.http.put(BACKEND_URL + id, planetData).subscribe(response => {
+      console.log(response);
+      this.planetsUpdated.next([...this.planets]);
       this.router.navigate(["/"]);
     });
   }

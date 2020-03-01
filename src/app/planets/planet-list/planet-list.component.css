@@ -2,19 +2,76 @@ mat-spinner {
   margin: auto;
 }
 
-mat-paginator {
-  margin: 1rem;
-}
-
 .info-text {
+  margin: auto;
   text-align: center;
 }
 
-.post-image {
-  width: 100%;
+:host {
+  display: block;
+  margin-top: 25px;
 }
 
-.post-image img {
-  width: 100%;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+.by-captain {
+  display: block;
+  font-weight: bold;
+  font-size: 10px;
+  color: black;
+}
+
+.by-captain span {
+  font-weight: normal;
+  text-decoration: underline;
+  color: rgb(49, 49, 49);
+}
+
+.spaceing {
+  margin-right: 1rem;
+}
+
+.robots {
+  font-size: 12px;
+  display: block;
+  font-weight: bolder;
+  color: black;
+}
+
+.robots span {
+  font-weight: normal;
+}
+
+.img {
+  width: 70pt;
+  height: 70pt;
+  /* margin: 10pt; */
+  display: block;
+}
+
+.planet-name {
+  font-size: 16px;
+  font-weight: bold;
+  display: block;
+  text-align: center;
+  color: black;
+}
+
+.description {
+  width: 150px;
+  display: grid;
+  grid-template-rows: 2fr 1fr 1fr;
+}
+
+.status {
+  font-weight: 900;
+  display: block;
+  text-align: center;
+  margin: auto;
+}
+
+mat-panel-description {
+  margin-right: 0px;
+}
+.description textarea {
+  border: none;
+  background-color: white;
 }

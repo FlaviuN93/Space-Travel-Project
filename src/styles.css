@@ -3,6 +3,7 @@
 html,
 body {
   height: 100%;
+  /* max-width: 425px; */
 }
 body {
   margin: 0;

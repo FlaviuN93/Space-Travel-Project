@@ -1,0 +1,169 @@
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 425px;
+  background-color: #f8f8f8;
+}
+
+#logo {
+  height: 140pt;
+  background-color: #b43f52;
+}
+#logo h3 {
+  text-align: center;
+  color: white;
+  /* padding: 20%; */
+  /* height: 140pt;
+background-color: #B43F52; */
+}
+
+.planet {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  border: 0.1pt solid rgb(148, 138, 138);
+  margin-top: 20px;
+  margin-bottom: 10px;
+  height: fit-content;
+  grid-gap: 1rem;
+  align-items: center;
+  padding-left: 20px;
+}
+
+.py-1 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.py-2 {
+  padding-block-start: 5rem;
+}
+
+.img {
+  width: 70pt;
+  height: 70pt;
+  /* margin: 10pt; */
+  display: block;
+}
+
+.planet-name {
+  font-size: 16;
+  font-weight: bold;
+  display: block;
+  text-align: center;
+  /* margin-top: 5pt;
+  margin-bottom: 20pt; */
+}
+
+.description {
+  font-size: 16;
+  display: inline-block;
+  /* margin-top: 20px; */
+}
+
+.by-capitan {
+  margin-top: 5pt;
+  display: block;
+  font-weight: bold;
+  font-size: 10pt;
+}
+
+.by-capitan span {
+  font-weight: normal;
+  text-decoration: underline;
+  color: gray;
+}
+
+.robots {
+  font-size: 14px;
+  margin-top: 5px;
+  display: block;
+  font-weight: bolder;
+}
+
+.robots span {
+  font-weight: normal;
+}
+
+.status-ok {
+  color: green;
+  font-weight: 900;
+  display: block;
+  text-align: center;
+  margin: auto;
+}
+
+.status-not-ok {
+  color: #b43f52;
+  font-weight: 900;
+  display: block;
+  text-align: center;
+  margin: auto;
+}
+
+.status-enroute {
+  color: grey;
+  font-weight: 900;
+  display: block;
+  text-align: center;
+  margin: auto;
+}
+
+.status-todo {
+  color: blue;
+  font-weight: 900;
+  display: block;
+  text-align: center;
+  margin: auto;
+}
+
+/* ONE PLANET */
+
+.one-planet-img {
+  width: 80pt;
+  height: 80pt;
+  display: block;
+  margin: auto;
+  margin-top: 40px;
+}
+
+.one-planet-name {
+  font-size: 20px;
+  font-weight: bolder;
+  display: block;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.input {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-gap: 1rem;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.textarea {
+  border-radius: 3pt;
+  height: 100px;
+  width: -webkit-fill-available;
+  border: 0.4px solid gray;
+  background-color: #f8f8f8;
+}
+
+.status {
+  display: block;
+  text-align: center;
+  margin: auto;
+}
+
+.submit {
+  background-color: #b43f52;
+  border: none;
+  border-radius: 2pt;
+  color: white;
+  margin: auto;
+  display: block;
+  padding: 10px 30px;
+  font-size: 14px;
+  margin-top: 50px;
+}

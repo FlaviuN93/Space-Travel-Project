@@ -30,14 +30,14 @@ textarea {
   margin-bottom: 14px;
 }
 
-.bycapitan {
+.bycaptain {
   margin-bottom: 10px;
   display: block;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 14px;
 }
 
-.bycapitan span {
+.bycaptain span {
   font-weight: normal;
   color: gray;
 }
@@ -64,14 +64,7 @@ textarea {
   font-size: 14px;
   margin-top: 25px;
 }
-/* .image-preview {
-  height: 4rem;
-  margin: 1rem 0;
-}
 
-.image-preview img {
-  height: 100%;
-} */
 /* input[type="file"] {
   visibility: hidden;
 } */

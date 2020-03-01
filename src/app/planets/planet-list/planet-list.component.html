@@ -1,12 +1,22 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
 <mat-accordion multi="true" *ngIf="planets.length > 0 && !isLoading">
-  <mat-expansion-panel *ngFor="let planet of planets">
+  <mat-expansion-panel *ngFor="let planet of planets" expanded="true">
     <mat-expansion-panel-header>
-      {{ planet.status }}
+      Title
     </mat-expansion-panel-header>
-
-    <p>{{ planet.description }}</p>
-    <mat-action-row *ngIf="userIsAuthenticated">
+    <mat-panel-description>
+      <div class="spaceing">
+        <img class="img" src="../../assets/img/planet1.png" />
+        <label class="planet-name">TAU 23</label>
+      </div>
+      <div class="description">
+        <textarea disabled rows="3">{{ planet.description }}</textarea>
+        <label class="by-captain">by Captain:<span> John</span></label>
+        <label class="robots">Robots:<span> RT55, T55</span></label>
+      </div>
+      <div class="status">{{ planet.status }}</div>
+    </mat-panel-description>
+    <mat-action-row *ngIf="userIsAuthenticated && userId === planet.creator">
       <a mat-button color="primary" [routerLink]="['/edit', planet.id]">EDIT</a>
       <button mat-button color="warn" (click)="onDelete(planet.id)">
         DELETE
@@ -14,16 +24,6 @@
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
-<mat-paginator
-  [length]="totalPosts"
-  [pageSize]="postsPerPage"
-  [pageSizeOptions]="pageSizeOptions"
-  (page)="onChangedPage($event)"
-  *ngIf="planets.length > 0"
-></mat-paginator>
 <p class="info-text mat-body-1" *ngIf="planets.length <= 0 && !isLoading">
   No posts added yet!
 </p>
-<!-- <div class="post-image">
-    <img [src]="planet.imagePath" [alt]="planet.title" />
-  </div> -->

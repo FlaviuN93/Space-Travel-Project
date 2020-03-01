@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
-import { PageEvent } from "@angular/material";
 
 import { Planet } from "../planet.model";
 import { PlanetsService } from "../planets.service";
@@ -12,17 +11,9 @@ import { AuthService } from "src/app/auth/auth.service";
   styleUrls: ["./planet-list.component.css"]
 })
 export class PlanetListComponent implements OnInit, OnDestroy {
-  // posts = [
-  //   { title: "First Post", content: "This is the first post's content" },
-  //   { title: "Second Post", content: "This is the second post's content" },
-  //   { title: "Third Post", content: "This is the third post's content" }
-  // ];
   planets: Planet[] = [];
   isLoading = false;
-  totalPosts = 0;
-  currentPage = 1;
-  postsPerPage = 2;
-  pageSizeOptions = [1, 2, 5, 10];
+  userId: string;
   public userIsAuthenticated = false;
   private planetsSub: Subscription;
   private statusSub: Subscription;
@@ -33,39 +24,29 @@ export class PlanetListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isLoading = true;
-    this.planetsService.getPosts(this.postsPerPage, 1);
+    this.planetsService.getPosts();
+    this.userId = this.authService.getUserId();
     this.planetsSub = this.planetsService
       .getPostUpdateListener()
-      .subscribe((planetData: { planets: Planet[]; postCount: number }) => {
+      .subscribe((planetData: Planet[]) => {
         this.isLoading = false;
-        this.totalPosts = planetData.postCount;
-        this.planets = planetData.planets;
+        this.planets = planetData;
       });
+
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.statusSub = this.authService
       .getAuthListener()
       .subscribe(isAuthenticated => {
         this.userIsAuthenticated = isAuthenticated;
+        this.userId = this.authService.getUserId();
       });
-  }
-
-  onChangedPage(pageData: PageEvent) {
-    this.isLoading = true;
-    this.currentPage = pageData.pageIndex + 1;
-    this.postsPerPage = pageData.pageSize;
-    this.planetsService.getPosts(this.postsPerPage, this.currentPage);
   }
 
   onDelete(planetId: string) {
     this.isLoading = true;
-    this.planetsService.deletePost(planetId).subscribe(
-      () => {
-        this.planetsService.getPosts(this.postsPerPage, this.currentPage);
-      },
-      () => {
-        this.isLoading = false;
-      }
-    );
+    this.planetsService.deletePost(planetId).subscribe(() => {
+      this.planetsService.getPosts();
+    });
   }
 
   ngOnDestroy() {

@@ -3,7 +3,8 @@ const Planet = require("../models/planet");
 exports.createPlanet = (req, res, next) => {
   const planet = new Planet({
     description: req.body.description,
-    status: req.body.status
+    status: req.body.status,
+    creator: req.userData.userId
   });
   planet
     .save()
@@ -11,7 +12,7 @@ exports.createPlanet = (req, res, next) => {
       res.status(201).json({
         message: "Planet added successfully",
         planet: {
-          id: createdPlanet._id,
+          planetId: createdPlanet._id,
           description: createdPlanet.description,
           status: createdPlanet.status
         }
@@ -26,14 +27,15 @@ exports.updatePlanet = (req, res, next) => {
   const planet = new Planet({
     _id: req.body.id,
     description: req.body.description,
-    status: req.body.status
+    status: req.body.status,
+    creator: req.userData.userId
   });
-  Planet.updateOne({ _id: req.params.id }, planet)
+  Planet.updateOne({ _id: req.params.id, creator: req.userData.userId }, planet)
     .then(result => {
       if (result.n > 0) {
         res.status(200).json({ message: "Update successful!" });
       } else {
-        res.status(401).json({ message: "Not authorized!" });
+        res.status(401).json({ message: "Not authorized" });
       }
     })
     .catch(error => {
@@ -42,23 +44,11 @@ exports.updatePlanet = (req, res, next) => {
 };
 
 exports.getPlanets = (req, res, next) => {
-  const pageSize = +req.query.pagesize;
-  const currentPage = +req.query.page;
-  const postQuery = Planet.find();
-  let fetchedPlanets;
-  if (pageSize && currentPage) {
-    postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
-  }
-  postQuery
+  Planet.find()
     .then(documents => {
-      fetchedPlanets = documents;
-      return Planet.countDocuments();
-    })
-    .then(count => {
       res.status(200).json({
-        message: "Posts fetched successfully!",
-        planets: fetchedPlanets,
-        maxPosts: count
+        message: "Planets fetched successfully!",
+        planets: documents
       });
     })
     .catch(error => {
@@ -81,12 +71,12 @@ exports.getPlanet = (req, res, next) => {
 };
 
 exports.deletePlanet = (req, res, next) => {
-  Planet.deleteOne({ _id: req.params.id })
+  Planet.deleteOne({ _id: req.params.id, creator: req.userData.userId })
     .then(result => {
       if (result.n > 0) {
         res.status(200).json({ message: "Deletion successful!" });
       } else {
-        res.status(401).json({ message: "Not authorized!" });
+        res.status(401).json({ message: "Not authorized" });
       }
     })
     .catch(error => {

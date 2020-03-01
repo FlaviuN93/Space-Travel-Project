@@ -12,8 +12,8 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: "edit/:postId",
-    component: PlanetListComponent,
+    path: "edit/:planetId",
+    component: CreatePlanetComponent,
     canActivate: [AuthGuard]
   },
   {

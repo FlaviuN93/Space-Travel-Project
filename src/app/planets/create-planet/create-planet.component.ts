@@ -33,12 +33,18 @@ export class CreatePlanetComponent implements OnInit, OnDestroy {
       .subscribe(authStatus => {
         this.isLoading = false;
       });
+
     this.form = new FormGroup({
       description: new FormControl(null, {
-        validators: [Validators.required, Validators.maxLength(25)]
+        validators: [
+          Validators.required,
+          Validators.maxLength(120),
+          Validators.minLength(20)
+        ]
       }),
       status: new FormControl(null, { validators: [Validators.required] })
     });
+
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has("planetId")) {
         this.mode = "edit";
@@ -49,7 +55,8 @@ export class CreatePlanetComponent implements OnInit, OnDestroy {
           this.planet = {
             id: planetData._id,
             description: planetData.description,
-            status: planetData.status
+            status: planetData.status,
+            creator: planetData.creator
           };
           this.form.setValue({
             description: this.planet.description,
@@ -62,17 +69,6 @@ export class CreatePlanetComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  // onImagePicked(event: Event) {
-  //   const file = (event.target as HTMLInputElement).files[0];
-  //   this.form.patchValue({ image: file });
-  //   this.form.get("image").updateValueAndValidity();
-  //   const reader = new FileReader();
-  //   reader.onload = () => {
-  //     this.imagePreview = reader.result as string;
-  //   };
-  //   reader.readAsDataURL(file);
-  // }
 
   onSavePlanet() {
     if (this.form.invalid) {
