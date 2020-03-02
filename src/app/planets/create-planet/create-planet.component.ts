@@ -15,6 +15,8 @@ export class CreatePlanetComponent implements OnInit, OnDestroy {
   planet: Planet;
   isLoading = false;
   form: FormGroup;
+  randomImage: string =
+    "../../assets/img/planet" + Math.floor(Math.random() * 8 + 1) + ".png";
   private mode = "create";
   private planetId: string;
   private authStatusSub: Subscription;
@@ -38,8 +40,8 @@ export class CreatePlanetComponent implements OnInit, OnDestroy {
       description: new FormControl(null, {
         validators: [
           Validators.required,
-          Validators.maxLength(120),
-          Validators.minLength(20)
+          Validators.maxLength(80),
+          Validators.minLength(10)
         ]
       }),
       status: new FormControl(null, { validators: [Validators.required] })

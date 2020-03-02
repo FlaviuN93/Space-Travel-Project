@@ -22,9 +22,11 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.authStatusSub = this.authService.getAuthListener().subscribe(authStatus => {
-      this.isLoading = false;
-    });
+    this.authStatusSub = this.authService
+      .getAuthListener()
+      .subscribe(authStatus => {
+        this.isLoading = false;
+      });
   }
 
   ngOnDestroy() {
