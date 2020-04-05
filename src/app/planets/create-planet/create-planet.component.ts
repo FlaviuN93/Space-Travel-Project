@@ -9,7 +9,7 @@ import { AuthService } from "src/app/auth/auth.service";
 @Component({
   selector: "app-create-planet",
   templateUrl: "./create-planet.component.html",
-  styleUrls: ["./create-planet.component.css"]
+  styleUrls: ["./create-planet.component.css"],
 })
 export class CreatePlanetComponent implements OnInit, OnDestroy {
   planet: Planet;
@@ -32,19 +32,15 @@ export class CreatePlanetComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authStatusSub = this.authService
       .getAuthListener()
-      .subscribe(authStatus => {
+      .subscribe((authStatus) => {
         this.isLoading = false;
       });
 
     this.form = new FormGroup({
       description: new FormControl(null, {
-        validators: [
-          Validators.required,
-          Validators.maxLength(80),
-          Validators.minLength(10)
-        ]
+        validators: [Validators.required, Validators.minLength(5)],
       }),
-      status: new FormControl(null, { validators: [Validators.required] })
+      status: new FormControl(null, { validators: [Validators.required] }),
     });
 
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
@@ -52,19 +48,21 @@ export class CreatePlanetComponent implements OnInit, OnDestroy {
         this.mode = "edit";
         this.planetId = paramMap.get("planetId");
         this.isLoading = true;
-        this.planetsService.getPostEdit(this.planetId).subscribe(planetData => {
-          this.isLoading = false;
-          this.planet = {
-            id: planetData._id,
-            description: planetData.description,
-            status: planetData.status,
-            creator: planetData.creator
-          };
-          this.form.setValue({
-            description: this.planet.description,
-            status: this.planet.status
+        this.planetsService
+          .getPostEdit(this.planetId)
+          .subscribe((planetData) => {
+            this.isLoading = false;
+            this.planet = {
+              id: planetData._id,
+              description: planetData.description,
+              status: planetData.status,
+              creator: planetData.creator,
+            };
+            this.form.setValue({
+              description: this.planet.description,
+              status: this.planet.status,
+            });
           });
-        });
       } else {
         this.mode = "create";
         this.planetId = null;
